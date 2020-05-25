@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection>
+  <dragon id="1">
+    <name>Микиланджело</name>
+    <coordinates>
+      <x>-1</x>
+      <y>-1</y>
+    </coordinates>
+    <creationDate>Sun May 24 16:13:05 MSK 2020</creationDate>
+    <age>1</age>
+    <wingspan>1.0</wingspan>
+    <character>EVIL</character>
+    <type>FIRE</type>
+    <killer>
+      <name>ВТ</name>
+      <birthday>
+        <year>1960</year>
+        <month>MAY</month>
+        <day>20</day>
+      </birthday>
+      <hairColor>RED</hairColor>
+      <nationality>RUSSIA</nationality>
+      <location>
+        <x>1010</x>
+        <y>1010</y>
+        <z>1010.0</z>
+        <name>Белорусская 6</name>
+      </location>
+    </killer>
+  </dragon>
+  <dragon id="0">
+    <name>Макеавелли</name>
+    <coordinates>
+      <x>100</x>
+      <y>200</y>
+    </coordinates>
+    <creationDate>Sun May 24 16:13:05 MSK 2020</creationDate>
+    <age>10</age>
+    <wingspan>100.0</wingspan>
+    <character>GOOD</character>
+    <type>WATER</type>
+    <killer>
+      <name>Егор Сладкий</name>
+      <birthday>
+        <year>2007</year>
+        <month>DECEMBER</month>
+        <day>31</day>
+      </birthday>
+      <hairColor>GREEN</hairColor>
+      <nationality>RUSSIA</nationality>
+      <location>
+        <x>111</x>
+        <y>1555</y>
+        <z>15.5</z>
+        <name>Белорусская 6</name>
+      </location>
+    </killer>
+  </dragon>
+</collection>
