@@ -15,6 +15,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Server {
@@ -25,9 +26,9 @@ public class Server {
     private static SocketChannel socketChannel;
     private static ServerSocketChannel ssc;
     private static MyDragonsCollection drakoniNelegalnie;
-    private static Scanner scanner = new Scanner(System.in);
+    private static Scanner scanner;
     public static final Logger log = LoggerFactory.getLogger(Server.class);
-
+    private static CommandReceiver serverReceiver;
     public static void main(String[] args){
         try {
             run();
@@ -38,33 +39,65 @@ public class Server {
         }
     }
 
-    private static void run() throws IOException, NoSuchDragonException {
+    private static void run() throws NoSuchDragonException, IOException {
         initializeCollection();
-        CommandReceiver serverReceiver = new CommandReceiver(drakoniNelegalnie);
-        firstConnection(); // теперь клиент точно подключен
-        while(sendOneByte()){ // если отправлено значит соединение есть
-            Command command = getCommandFromClient();
-            String resp=null;
-            if(command!=null)  {
-                resp = command.execute(serverReceiver);
-                sendResponse(resp);
-            }
-        }
-        new SaveCommand().execute(serverReceiver);
-        if(scanner.hasNextLine()){
-            String[] line = scanner.nextLine().trim().split(" ");
-            if(line[0].equals("save")){
-                switch (line.length){
-                    case 1: new SaveCommand().execute(serverReceiver);
-                        log.info("saved");
-                        break;
-                    case 2: new SaveCommand(line[1]).execute(serverReceiver);
-                        log.info("saved in " + line[1]);
-                        break;
-                    default: log.info("неверное количество аргументов");
+        scanner = new Scanner(System.in);
+        serverReceiver = new CommandReceiver(drakoniNelegalnie);
+        while(true){
+            firstConnection(); // теперь клиент точно подключен
+            while(sendOneByte()){ // если отправлено значит соединение есть
+                Command command = getCommandFromClient();
+                String resp;
+                if(command!=null)  {
+                    resp = command.execute(serverReceiver);
+                    sendResponse(resp);
                 }
             }
+            new SaveCommand().execute(serverReceiver);
+            closeEverything();
+            checkServerCommand();
         }
+    }
+
+    //я напишу это нормально если надо будет в сервере использовать побольше команд
+    private static void checkServerCommand(){
+        try{
+            //String[] line = scanner.nextLine().trim().split(" ");
+            log.info("now server can use commands 'save <filename>' or 'exit'");
+            log.info("(blocking mode)");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            String[] line;
+            String line1;
+            if((line1 = reader.readLine())!=null){
+                line = line1.trim().split(" ");
+                if(line[0].equals("save")){
+                    switch (line.length){
+                        case 1: new SaveCommand().execute(serverReceiver);
+                            log.info("saved in default file");
+                            break;
+                        case 2: new SaveCommand(line[1]).execute(serverReceiver);
+                            log.info("saved in " + line[1]);
+                            break;
+                        default: log.info("неверное количество аргументов");
+                    }
+                }else if(line[0].equals("exit") && line.length==1){
+                    log.info("exiting");
+                    System.exit(0);
+                }else{
+                    log.info("no such command");
+                }
+            }
+        }catch (NoSuchElementException | IOException e){
+            log.info("checked if there was a command from server");
+        }
+
+    }
+
+    private static void closeEverything() throws IOException {
+        ssc.close();
+        socketChannel.close();
+        ssc = null;
+        socketChannel = null;
     }
 
     private static boolean sendOneByte() {
@@ -82,16 +115,21 @@ public class Server {
     }
 
     //•	Модуль приёма подключений.
-    private static void firstConnection() throws IOException {
-        if(ssc==null){
-            ssc = ServerSocketChannel.open();
-            log.info("ServerSocketChannel is opened");
-            ssc.socket().bind(new InetSocketAddress(PORT));
-            ssc.configureBlocking(false);
-        }
-        while(socketChannel==null){
-            socketChannel = ssc.accept();
-            if(socketChannel !=null) log.info("Клиент подключился");
+    private static void firstConnection() {
+        try {
+            if (ssc == null) {
+                ssc = ServerSocketChannel.open();
+                log.info("ServerSocketChannel is opened. Waiting for client.");
+                ssc.socket().bind(new InetSocketAddress(PORT));
+                ssc.configureBlocking(false);
+            }
+
+            while (socketChannel == null) {
+                socketChannel = ssc.accept();
+                if (socketChannel != null) log.info("Клиент подключился");
+            }
+        } catch (IOException e) {
+            log.info("неправильный порт");
         }
     }
 
@@ -123,7 +161,6 @@ public class Server {
                 log.info("Полученная команда: " + command.toString());
                 return command;
             }
-            log.info("getCommand возвратило null");
             return null;
         } catch (ClassNotFoundException e) {
             log.error("Error while serialization");

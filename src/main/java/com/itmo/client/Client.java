@@ -79,7 +79,7 @@ public class Client {
         socket.getOutputStream().write(serializedCommand);
     }
 
-    private static void connect() {
+    private static void connect()  {
         System.out.println("Пытаюсь установить соединение с сервером");
         while (true) {
             try {
