@@ -44,8 +44,9 @@ public class Server {
         scanner = new Scanner(System.in);
         serverReceiver = new CommandReceiver(drakoniNelegalnie);
         while(true){
-            firstConnection(); // теперь клиент точно подключен
+            connect(); // теперь клиент точно подключен
             while(sendOneByte()){ // если отправлено значит соединение есть
+                checkServerCommand();
                 Command command = getCommandFromClient();
                 String resp;
                 if(command!=null)  {
@@ -54,43 +55,44 @@ public class Server {
                 }
             }
             new SaveCommand().execute(serverReceiver);
-            closeEverything();
             checkServerCommand();
+            closeEverything();
         }
     }
-
     //я напишу это нормально если надо будет в сервере использовать побольше команд
-    private static void checkServerCommand(){
-        try{
-            //String[] line = scanner.nextLine().trim().split(" ");
-            log.info("now server can use commands 'save <filename>' or 'exit'");
-            log.info("(blocking mode)");
+    private static void checkServerCommand() {
+        try {
+            log.info("now server can use commands 'save [filename]' or 'exit'");
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             String[] line;
             String line1;
-            if((line1 = reader.readLine())!=null){
-                line = line1.trim().split(" ");
-                if(line[0].equals("save")){
-                    switch (line.length){
-                        case 1: new SaveCommand().execute(serverReceiver);
-                            log.info("saved in default file");
-                            break;
-                        case 2: new SaveCommand(line[1]).execute(serverReceiver);
-                            log.info("saved in " + line[1]);
-                            break;
-                        default: log.info("неверное количество аргументов");
+            if(System.in.available()>0){
+                if ((line1 = reader.readLine()) != null) {
+                    line = line1.trim().split(" ");
+                    if (line[0].equals("save")) {
+                        switch (line.length) {
+                            case 1:
+                                new SaveCommand().execute(serverReceiver);
+                                log.info("saved in default file");
+                                break;
+                            case 2:
+                                new SaveCommand(line[1]).execute(serverReceiver);
+                                log.info("saved in " + line[1]);
+                                break;
+                            default:
+                                log.info("неверное количество аргументов");
+                        }
+                    } else if (line[0].equals("exit") && line.length == 1) {
+                        log.info("exiting");
+                        System.exit(0);
+                    } else {
+                        log.info("no such command");
                     }
-                }else if(line[0].equals("exit") && line.length==1){
-                    log.info("exiting");
-                    System.exit(0);
-                }else{
-                    log.info("no such command");
                 }
             }
-        }catch (NoSuchElementException | IOException e){
+        } catch (NoSuchElementException | IOException e) {
             log.info("checked if there was a command from server");
         }
-
     }
 
     private static void closeEverything() throws IOException {
@@ -115,7 +117,7 @@ public class Server {
     }
 
     //•	Модуль приёма подключений.
-    private static void firstConnection() {
+    private static void connect() {
         try {
             if (ssc == null) {
                 ssc = ServerSocketChannel.open();
