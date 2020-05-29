@@ -60,7 +60,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.itmo.client.Client</mainClass>
+                            <mainClass>com.itmo.server.Server</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

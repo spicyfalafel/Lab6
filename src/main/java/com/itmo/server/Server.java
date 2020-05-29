@@ -55,18 +55,16 @@ public class Server {
                 }
             }
             new SaveCommand().execute(serverReceiver);
-            checkServerCommand();
             closeEverything();
         }
     }
     //я напишу это нормально если надо будет в сервере использовать побольше команд
     private static void checkServerCommand() {
         try {
-            log.info("now server can use commands 'save [filename]' or 'exit'");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            String[] line;
-            String line1;
             if(System.in.available()>0){
+                String[] line;
+                String line1;
+                BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                 if ((line1 = reader.readLine()) != null) {
                     line = line1.trim().split(" ");
                     if (line[0].equals("save")) {
@@ -84,6 +82,8 @@ public class Server {
                         }
                     } else if (line[0].equals("exit") && line.length == 1) {
                         log.info("exiting");
+                        scanner.close();
+                        closeEverything();
                         System.exit(0);
                     } else {
                         log.info("no such command");
@@ -103,10 +103,10 @@ public class Server {
     }
 
     private static boolean sendOneByte() {
+        int sended = 0;
         byte[] b = new byte[1];
         b[0] = (byte) 127;
         ByteBuffer buff = ByteBuffer.wrap(b);
-        int sended = 0;
         try {
             sended = socketChannel.write(buff);
             log.info("Sended: " + sended+ " (buff:" + Arrays.toString(buff.array()) +")");
@@ -127,6 +127,7 @@ public class Server {
             }
 
             while (socketChannel == null) {
+                checkServerCommand();
                 socketChannel = ssc.accept();
                 if (socketChannel != null) log.info("Клиент подключился");
             }
