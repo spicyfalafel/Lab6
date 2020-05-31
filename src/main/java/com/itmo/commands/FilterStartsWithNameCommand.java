@@ -1,6 +1,6 @@
 package com.itmo.commands;
 
-import com.itmo.app.Dragon;
+import com.itmo.collection.Dragon;
 
 import java.util.HashSet;
 

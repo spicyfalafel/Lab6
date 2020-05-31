@@ -1,5 +1,6 @@
 package com.itmo.app;
 
+import com.itmo.collection.*;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -27,10 +28,10 @@ public class XmlStaff {
     public static HashSet<Dragon> fromXmlToDragonList(File xmlFile) throws FileNotFoundException, JDOMParseException, JDOMException  {
         SAXBuilder builder = new SAXBuilder();
         BufferedReader reader = new BufferedReader(new FileReader(xmlFile));
-        HashSet<Dragon> res = new HashSet<Dragon>();
+        HashSet<Dragon> res = new HashSet<>();
         System.out.println("Parsing FILE: "+ xmlFile.getAbsolutePath());
         try {
-            Document document = (Document) builder.build(reader);
+            Document document = builder.build(reader);
             // rootNode == collection
             Element rootNode = document.getRootElement();
             List<Element> list = rootNode.getChildren("dragon");

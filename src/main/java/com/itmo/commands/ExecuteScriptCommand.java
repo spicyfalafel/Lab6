@@ -41,11 +41,9 @@ public class ExecuteScriptCommand extends Command {
                 if (c != null) {
                     c.clientInsertion();
                     byte[] serializedCommand = SerializationManager.writeObject(c);
+                    Client.sendOneByte();
                     Client.socket.getOutputStream().write(serializedCommand);
-                    byte[] buff = new byte[4096];
-                    int got = Client.socket.getInputStream().read(buff);
-                    Response r = SerializationManager.readObject(buff);
-                    System.out.println(r.getAnswer());
+                    Client.getAnswer();
                 }
             }
         } catch (FileNotFoundException e) {

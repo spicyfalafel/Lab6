@@ -1,6 +1,6 @@
 package com.itmo.commands;
 
-import com.itmo.app.Dragon;
+import com.itmo.collection.Dragon;
 
 import java.util.Scanner;
 
@@ -25,8 +25,8 @@ public class UpdateIdCommand extends Command{
     @Override
     public void clientInsertion() {
         Scanner sc = new Scanner(System.in);
-        InputHelper inputHelper = new InputHelper(sc);
-        dr = inputHelper.scanDragon();
+        FieldsScanner fieldsScanner = new FieldsScanner(sc);
+        dr = fieldsScanner.scanDragon();
     }
 
     /**

@@ -1,7 +1,7 @@
 package com.itmo.commands;
 
 import com.itmo.app.XmlStaff;
-import com.itmo.server.Server;
+import com.itmo.server.ServerMain;
 
 import java.io.FileNotFoundException;
 
@@ -33,10 +33,10 @@ public class SaveCommand extends Command {
     public String execute(CommandReceiver receiver) {
         try{
             XmlStaff.writeCollectionToFile(receiver.getCollection().getDragons(), args[0]);
-            Server.log.info("save done");
+            ServerMain.logger.info("save done");
             return "save done";
         }catch (FileNotFoundException e){
-            Server.log.info("файл для сохранения не найден. возможно препод убрал права на файл или директорию.");
+            ServerMain.logger.info("файл для сохранения не найден. возможно препод убрал права на файл или директорию.");
             return "файл для сохранения не найден.";
         }
     }

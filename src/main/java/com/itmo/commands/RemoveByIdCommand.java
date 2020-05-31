@@ -23,13 +23,13 @@ public class RemoveByIdCommand extends Command {
 
 
     @Override
-    public String execute(CommandReceiver receiver) throws NoSuchDragonException {
+    public String execute(CommandReceiver receiver) {
         try{
             long id = Long.parseLong(args[0]);
             if(receiver.getCollection().removeById(id)){
                 return "Dragon with id " + args[0] + " removed";
             }else{
-                throw new NoSuchDragonException(id);
+                return "No such dragon with id " + args[0];
             }
         }catch (NumberFormatException e){
             return "id - это число большее нуля";

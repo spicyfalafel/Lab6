@@ -23,7 +23,7 @@ public class ExitCommand extends Command {
 
     @Override
     public String getDescription() {
-        return "завершить программу (без сохранения в файл)";
+        return "завершить программу";
     }
 
     @Override

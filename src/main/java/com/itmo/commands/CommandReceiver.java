@@ -1,9 +1,7 @@
 package com.itmo.commands;
 
-import com.itmo.app.MyDragonsCollection;
+import com.itmo.collection.MyDragonsCollection;
 
-import java.io.BufferedReader;
-import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;

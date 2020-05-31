@@ -1,6 +1,6 @@
 package com.itmo.commands;
 
-import com.itmo.app.Dragon;
+import com.itmo.collection.Dragon;
 
 import java.util.Scanner;
 
@@ -13,7 +13,7 @@ public class AddIfMaxCommand extends Command{
     @Override
     public void clientInsertion() {
         Scanner sc = new Scanner(System.in);
-        InputHelper helper = new InputHelper(sc);
+        FieldsScanner helper = new FieldsScanner(sc);
         dr = helper.scanDragon();
     }
 

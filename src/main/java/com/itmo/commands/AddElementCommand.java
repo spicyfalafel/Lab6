@@ -1,6 +1,6 @@
 package com.itmo.commands;
 
-import com.itmo.app.Dragon;
+import com.itmo.collection.Dragon;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -20,8 +20,8 @@ public class AddElementCommand extends Command {
 
     @Override
     public void clientInsertion() {
-        InputHelper inputHelper = new InputHelper(new Scanner(System.in));
-        this.dr = inputHelper.scanDragon();
+        FieldsScanner fieldsScanner = new FieldsScanner(new Scanner(System.in));
+        this.dr = fieldsScanner.scanDragon();
     }
 
     @Override
