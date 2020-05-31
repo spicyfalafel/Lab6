@@ -8,7 +8,7 @@ import com.itmo.Exceptions.NoSuchDragonException;
 public interface Executable {
     /**
      * Execute.
-     * @throws NoSuchDragonException the no such dragon exception
+     *
      */
-    String execute(CommandReceiver receiver) throws NoSuchDragonException;
+    String execute(CommandReceiver receiver);
 }

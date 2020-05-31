@@ -8,12 +8,16 @@ import com.itmo.server.Response;
 import java.net.*;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class Client {
     private static CommandsInvoker invoker;
     public static Socket socket;
     private static boolean notExit = true;
+    private static BufferedReader systemIn
+            = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
+
     private static final Scanner scanner = new Scanner(System.in);
     private final String host;
     private final int port;
@@ -55,16 +59,18 @@ public class Client {
             }
         } catch (IOException e) {
             System.out.println("Потеря соединения");
+            connect();
         }catch (ClassNotFoundException e){
             System.out.println("Ошибка при сериализации");
         }
     }
 
-    private Command scanCommandFromConsole(){
+    private Command scanCommandFromConsole() throws IOException {
         Command command = null;
+        String line;
         do{
-            if(scanner.hasNextLine()){
-                command = getCommandFromString(scanner.nextLine());
+            if((line = systemIn.readLine()) != null){
+                command = getCommandFromString(line);
             }
         }while(command==null);
         command.clientInsertion();
@@ -105,7 +111,7 @@ public class Client {
             try {
                 InetAddress addr = InetAddress.getByName(host);
                 socket = new Socket(addr, port);
-                System.out.println("socket = " + socket);
+                System.out.println("Подключено: " + socket);
                 return;
             } catch (UnknownHostException e) {
                 System.out.println("Неправильно указан хост");

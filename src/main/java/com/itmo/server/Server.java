@@ -36,20 +36,26 @@ public class Server {
     }
 
 
-    public void run() throws NoSuchDragonException, IOException {
+    public void run() {
         initializeCollection();
         serverReceiver = new CommandReceiver(drakoniNelegalnie);
         connect(); // теперь клиент точно подключен
         while(serverOn){
             checkServerCommand();
-            checkCommandFromClient();
+            try {
+                checkCommandFromClient();
+            } catch (IOException e) {
+                log.info("Клиент отключился.");
+            } catch (NoSuchDragonException ignored) {
+            }
         }
         closeEverything();
     }
 
     private void checkCommandFromClient() throws IOException, NoSuchDragonException {
         if(checkOneByte()){ // если ПОЛУЧЕНО значит соединение есть
-            log.info("получен байт, значит щас придет команда");
+            log.info("получен байт проверки");
+            long a = System.currentTimeMillis();
             Command command = getCommandFromClient();
             String resp;
             if(command!=null){
@@ -59,6 +65,7 @@ public class Server {
                     new SaveCommand().execute(serverReceiver);
                 }
             }
+            log.info("Команда выполнилась за " + (System.currentTimeMillis()-a) + " миллисекунд");
         }
     }
     //я перепишу метод если надо будет в сервере использовать побольше команд
@@ -109,9 +116,9 @@ public class Server {
     }
 
     private boolean checkOneByte() throws IOException {
-        int bytesFromClient = socketChannel.read(b);
+        int bytesFromClient = 0;
+        if(socketChannel!=null) bytesFromClient = socketChannel.read(b);
         return (bytesFromClient==1);
-
     }
 
     //•	Модуль приёма подключений.
@@ -142,7 +149,6 @@ public class Server {
             byte[] ans = SerializationManager.writeObject(response);
             log.info("response serialized");
             ByteBuffer buffer = ByteBuffer.wrap(ans);
-            log.info("response buffered");
             int given = socketChannel.write(buffer);
             log.info("sended response: " + given + " bytes");
         } catch (IOException e) {
@@ -159,13 +165,11 @@ public class Server {
             while(b.position()==1){
                 got = socketChannel.read(b);
                 if(got!=0) log.info("получено байт:" + got);
-                if(b.position()!=1) log.info(Integer.toString(b.position()));
             }
             if(b.remaining()!=0){
                 command = SerializationManager.readObject(Arrays.copyOfRange(b.array(), 1, b.array().length-1));
                 log.info("Полученная команда: " + command.toString());
                 b.clear();
-                log.info("Position: "+ b.position() +", " + "Limit: " + b.limit());
                 return command;
             }
             return null;

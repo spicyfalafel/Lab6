@@ -10,7 +10,7 @@
     </properties>
 
     <groupId>com.itmo</groupId>
-    <artifactId>Server</artifactId>
+    <artifactId>SERVER</artifactId>
     <version>1.0</version>
     <dependencies>
         <dependency>
@@ -60,7 +60,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.itmo.server.Server</mainClass>
+                            <mainClass>com.itmo.server.ServerMain</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
