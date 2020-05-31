@@ -18,6 +18,7 @@ public class Client {
     private static final Scanner scanner = new Scanner(System.in);
     private final String host;
     private final int port;
+    private boolean once = true;
     public void run() {
         registerCommands();
         connect();
@@ -111,11 +112,15 @@ public class Client {
                 InetAddress addr = InetAddress.getByName(host);
                 socket = new Socket(addr, port);
                 System.out.println("Подключено: " + socket);
+                once=true;
                 return;
             } catch (UnknownHostException e) {
                 System.out.println("Неправильно указан хост");
             } catch (IOException e) {
-                System.out.println("Сервер отключен");
+                if(once){
+                    once=false;
+                    System.out.println("Сервер отключен");
+                }
             }
         }
     }
