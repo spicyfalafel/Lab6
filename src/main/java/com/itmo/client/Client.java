@@ -4,9 +4,7 @@ import com.itmo.Exceptions.WrongArgumentsNumberException;
 import com.itmo.app.SerializationManager;
 import com.itmo.commands.*;
 import com.itmo.server.Response;
-
 import java.net.*;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
@@ -15,9 +13,8 @@ public class Client {
     private static CommandsInvoker invoker;
     public static Socket socket;
     private static boolean notExit = true;
-    private static BufferedReader systemIn
+    private static final BufferedReader systemIn
             = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
-
     private static final Scanner scanner = new Scanner(System.in);
     private final String host;
     private final int port;
@@ -58,8 +55,10 @@ public class Client {
                 notExit = false;
             }
         } catch (IOException e) {
-            System.out.println("Потеря соединения");
-            connect();
+            if(notExit){
+                System.out.println("Потеря соединения");
+                connect();
+            }
         }catch (ClassNotFoundException e){
             System.out.println("Ошибка при сериализации");
         }
@@ -85,7 +84,7 @@ public class Client {
             System.out.println(r.getAnswer());
         }
     }
-    private void sendCommand(Command command) throws IOException {
+    public static void sendCommand(Command command) throws IOException {
         byte[] serializedCommand = SerializationManager.writeObject(command);
         socket.getOutputStream().write(serializedCommand);
     }

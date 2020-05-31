@@ -19,7 +19,7 @@ public class MyDragonsCollection implements Serializable {
 
     /**
      * конструктор, который использую в чтении из файла
-     * @param dragons
+     * @param dragons драконы, которые будут в коллекции
      */
     public MyDragonsCollection(HashSet<Dragon> dragons){
         creationDate = new Date();
@@ -67,7 +67,7 @@ public class MyDragonsCollection implements Serializable {
 
     /**
      * удалить из коллекции все элементы, меньшие, чем заданный
-     * @param dragon
+     * @param dragon дракон с которым будут сравниваться все элементы коллекции
      */
     public String removeLower(Dragon dragon) {
         StringBuilder builder = new StringBuilder();
@@ -82,7 +82,7 @@ public class MyDragonsCollection implements Serializable {
     /**
      * фильтрует коллекцию, оставляет только тех, чьи имена начинаются с name
      * @param name является началом имени драконов которых нужно получить
-     * @return
+     * @return сет драконов в отфильтрованном порядке
      */
     public HashSet<Dragon> filterStartsWithName(String name){
         Set<Dragon> dr = dragons.stream()
@@ -93,7 +93,6 @@ public class MyDragonsCollection implements Serializable {
     /**
      * простой метод для вывода коллекции в обратном порядке
      */
-
     public String printDescending(){
         StringBuilder builder = new StringBuilder();
         dragons.stream().sorted((o1, o2) -> (int) (o2.getValue()-o1.getValue()))

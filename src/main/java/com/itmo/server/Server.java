@@ -1,6 +1,5 @@
 package com.itmo.server;
 
-import com.itmo.Exceptions.NoSuchDragonException;
 import com.itmo.collection.MyDragonsCollection;
 import com.itmo.app.SerializationManager;
 import com.itmo.app.XmlStaff;
@@ -35,24 +34,24 @@ public class Server {
         this.port = port;
     }
 
-
     public void run() {
         initializeCollection();
-        serverReceiver = new CommandReceiver(drakoniNelegalnie);
-        connect(); // теперь клиент точно подключен
-        while(serverOn){
-            checkServerCommand();
+        while (serverOn) {
             try {
+                connect(); // теперь клиент точно подключен
+                checkServerCommand();
                 checkCommandFromClient();
             } catch (IOException e) {
-                log.info("Клиент отключился.");
-            } catch (NoSuchDragonException ignored) {
+                log.info("Проблема с соединением.");
+                new SaveCommand().execute(serverReceiver);
+                closeEverything();
             }
+
         }
         closeEverything();
     }
 
-    private void checkCommandFromClient() throws IOException, NoSuchDragonException {
+    private void checkCommandFromClient() throws IOException {
         if(checkOneByte()){ // если ПОЛУЧЕНО значит соединение есть
             log.info("получен байт проверки");
             long a = System.currentTimeMillis();
@@ -62,6 +61,7 @@ public class Server {
                 resp = command.execute(serverReceiver);
                 sendResponse(resp);
                 if(command instanceof ExitCommand){
+                    log.info("Клиент вышел");
                     new SaveCommand().execute(serverReceiver);
                 }
             }
@@ -209,6 +209,8 @@ public class Server {
         } catch (JDOMException e) {
             log.error("файл не получилось распарсить");
             drakoniNelegalnie = tryToGetFromDefaultFile();
+        }finally {
+            serverReceiver = new CommandReceiver(drakoniNelegalnie);
         }
     }
 
