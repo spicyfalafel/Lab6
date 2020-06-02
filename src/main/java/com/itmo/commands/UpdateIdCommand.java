@@ -38,7 +38,7 @@ public class UpdateIdCommand extends Command{
     public String execute(CommandReceiver receiver) {
         try{
             long id = Long.parseLong(args[0].trim());
-            if(receiver.getCollection().removeById(id)){
+            if(receiver.getCollection().findById(id)!=null){
                 dr.setId(id);
                 receiver.getCollection().add(dr);
                 return "Дракон добавлен успешно!";

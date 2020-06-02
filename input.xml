@@ -1,40 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <collection>
-  <dragon id="0">
-    <name>Макеавелли</name>
-    <coordinates>
-      <x>100</x>
-      <y>200</y>
-    </coordinates>
-    <creationDate>Sun May 31 15:47:30 MSK 2020</creationDate>
-    <age>10</age>
-    <wingspan>100.0</wingspan>
-    <character>GOOD</character>
-    <type>WATER</type>
-    <killer>
-      <name>Егор Сладкий</name>
-      <birthday>
-        <year>2007</year>
-        <month>DECEMBER</month>
-        <day>31</day>
-      </birthday>
-      <hairColor>GREEN</hairColor>
-      <nationality>RUSSIA</nationality>
-      <location>
-        <x>111</x>
-        <y>1555</y>
-        <z>15.5</z>
-        <name>Белорусская 6</name>
-      </location>
-    </killer>
-  </dragon>
   <dragon id="1">
     <name>Микиланджело</name>
     <coordinates>
       <x>-1</x>
       <y>-1</y>
     </coordinates>
-    <creationDate>Sun May 31 15:47:30 MSK 2020</creationDate>
+    <creationDate>Tue Jun 02 15:19:38 MSK 2020</creationDate>
     <age>1</age>
     <wingspan>1.0</wingspan>
     <character>EVIL</character>
@@ -52,6 +24,34 @@
         <x>1010</x>
         <y>1010</y>
         <z>1010.0</z>
+        <name>Белорусская 6</name>
+      </location>
+    </killer>
+  </dragon>
+  <dragon id="0">
+    <name>Макеавелли</name>
+    <coordinates>
+      <x>100</x>
+      <y>200</y>
+    </coordinates>
+    <creationDate>Tue Jun 02 15:19:38 MSK 2020</creationDate>
+    <age>10</age>
+    <wingspan>100.0</wingspan>
+    <character>GOOD</character>
+    <type>WATER</type>
+    <killer>
+      <name>Егор Сладкий</name>
+      <birthday>
+        <year>2007</year>
+        <month>DECEMBER</month>
+        <day>31</day>
+      </birthday>
+      <hairColor>GREEN</hairColor>
+      <nationality>RUSSIA</nationality>
+      <location>
+        <x>111</x>
+        <y>1555</y>
+        <z>15.5</z>
         <name>Белорусская 6</name>
       </location>
     </killer>

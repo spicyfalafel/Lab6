@@ -49,12 +49,12 @@ public class Client {
         }
         try{
             Command command = scanCommandFromConsole();
-            sendOneByte();
-            sendCommand(command);
-            getAnswer();
             if(command instanceof ExitCommand) {
                 notExit = false;
             }
+            sendOneByte();
+            sendCommand(command);
+            getAnswer();
         } catch (IOException e) {
             if(notExit){
                 System.out.println("Потеря соединения");
@@ -97,10 +97,7 @@ public class Client {
         System.arraycopy(splitted, 1, arguments, 0, splitted.length - 1);
         try {
             return invoker.validateCommand(commandName, arguments);
-        } catch (WrongArgumentsNumberException e) {
-            System.out.println("WrongArgumentsNumberException");
-            return null;
-        }catch (NoSuchCommandException e){
+        } catch (WrongArgumentsNumberException | NoSuchCommandException e) {
             return null;
         }
     }
