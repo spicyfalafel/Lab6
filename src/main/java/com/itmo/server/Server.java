@@ -35,9 +35,10 @@ public class Server {
         initializeCollection();
         setupNet();
         while (serverOn) {
-            checkServerCommand();
             checkClients();
+            checkServerCommand();
         }
+        new SaveCommand().execute(serverReceiver);
         closeEverything();
     }
 
@@ -59,7 +60,6 @@ public class Server {
                 sendResponse(resp, channel);
                 if(command instanceof ExitCommand){
                     log.info("Клиент вышел");
-                    new SaveCommand().execute(serverReceiver);
                 }
             }
             log.info("Команда выполнилась за " + (System.currentTimeMillis()-a) + " миллисекунд");
@@ -99,14 +99,14 @@ public class Server {
             Set<SelectionKey> keySet = selector.selectedKeys();
             Iterator<SelectionKey> itor = keySet.iterator();
             while (itor.hasNext() && serverOn) {
-                checkServerCommand();
                 SelectionKey selectionKey = itor.next();
                 itor.remove();
                 checkAcceptable(selectionKey);
                 checkWritable(selectionKey);
+                checkServerCommand();
             }
         } catch (IOException ioException) {
-            ioException.printStackTrace();
+            log.error("Не удалось проверить клиентов");
         }
     }
 
@@ -157,14 +157,14 @@ public class Server {
                 }
             }
         } catch (NoSuchElementException | IOException e) {
-            log.info("checked if there was a command from server");
+
         }
     }
 
     private void closeEverything() {
         try {
             if(ssc!=null) ssc.close();
-            selector.close();
+            if(selector!=null) selector.close();
         } catch (IOException ignored) {
         }
         ssc = null;
@@ -182,7 +182,7 @@ public class Server {
             selector = Selector.open();
             ssc.register(selector, SelectionKey.OP_ACCEPT);
         } catch (IOException e) {
-            System.err.println("Unable to setup environment");
+            System.out.println("Сервер уже запущен с другого окна...");
         }
     }
 
