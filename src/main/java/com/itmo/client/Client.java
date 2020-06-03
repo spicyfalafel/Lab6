@@ -12,6 +12,7 @@ import java.util.Scanner;
 public class Client {
     private static CommandsInvoker invoker;
     public static Socket socket;
+    public static final int BUFFER_SIZE = 4096;
     private static boolean notExit = true;
     private static final BufferedReader systemIn
             = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
@@ -78,7 +79,7 @@ public class Client {
     }
 
     public static void getAnswer() throws IOException, ClassNotFoundException {
-        byte[] buff = new byte[4096];
+        byte[] buff = new byte[BUFFER_SIZE];
         int got = socket.getInputStream().read(buff);
         if(got>0){
             Response r = SerializationManager.readObject(buff);

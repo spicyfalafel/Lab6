@@ -3,10 +3,11 @@ package com.itmo.collection;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MyDragonsCollection implements Serializable {
 
-    private final HashSet<Dragon> dragons;
+    private HashSet<Dragon> dragons;
     private final Date creationDate;
 
     /**
@@ -29,8 +30,9 @@ public class MyDragonsCollection implements Serializable {
     public String show(){
         StringBuilder builder = new StringBuilder();
         if(dragons.size() == 0) return "Коллекция пуста. Добавьте дракончиков.";
-        dragons.forEach(d ->{
-                builder.append("----------\n").append(d.toString());
+        TreeSet<Dragon> treeSet = new TreeSet<>(dragons);
+        treeSet.forEach(d ->{
+                builder.append("----------\n").append(d.toString()).append("\n");
         });
         return builder.toString();
     }
@@ -41,6 +43,7 @@ public class MyDragonsCollection implements Serializable {
     public String add(Dragon dragon){
         Set<Long> setIds = dragons.stream().map(Dragon::getId).collect(Collectors.toSet());
         //генерация id
+
         for(long i = 0; i<Long.MAX_VALUE;i++){
             if(!setIds.contains(i)){
                 dragon.setId(i);
@@ -48,6 +51,9 @@ public class MyDragonsCollection implements Serializable {
                 return "Дракон добавлен";
             }
         }
+
+        //Stream.iterate(0, i -> i++).limit(Long.MAX_VALUE).
+
         return "Дракон не добавлен потому что не удалось сгенерировать для него id.";
     }
     public String addIfMax(Dragon dragon){

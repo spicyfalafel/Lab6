@@ -4,11 +4,13 @@ import com.itmo.collection.MyDragonsCollection;
 import com.itmo.app.SerializationManager;
 import com.itmo.app.XmlStaff;
 import com.itmo.commands.*;
+import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
 import org.slf4j.Logger;
 import org.jdom2.JDOMException;
 import org.jdom2.input.JDOMParseException;
 import java.io.*;
 import java.net.InetSocketAddress;
+import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -19,7 +21,7 @@ import java.util.*;
 import static com.itmo.server.ServerMain.PORT;
 
 public class Server {
-    private final int DEFAULT_BUFFER_SIZE = 2048;
+    private final int DEFAULT_BUFFER_SIZE = 4096;
     private final String FILE_ENV = "INPUT_PATH";
     private final String defaultFileName = "input.xml";
     private ServerSocketChannel ssc;
@@ -60,6 +62,7 @@ public class Server {
                 sendResponse(resp, channel);
                 if(command instanceof ExitCommand){
                     log.info("Клиент вышел");
+                    new SaveCommand().execute(serverReceiver);
                 }
             }
             log.info("Команда выполнилась за " + (System.currentTimeMillis()-a) + " миллисекунд");
@@ -74,19 +77,25 @@ public class Server {
                 log.info("accepted client");
                 try {
                     channel.configureBlocking(false);
+                    channel.setOption(StandardSocketOptions.SO_KEEPALIVE, true);
                     channel.register(selector, SelectionKey.OP_WRITE);
                 } catch (IOException e) {
-                    log.error("Unable to use channel");
+                    log.error("Unable to accept channel");
                     selectionKey.cancel();
                 }
             }
         }
     }
 
-    private void checkWritable(SelectionKey selectionKey) throws IOException {
+    private void checkWritable(SelectionKey selectionKey) {
         if(selectionKey.isWritable()) {
             SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
-            checkCommandFromClient(socketChannel);
+            try {
+                checkCommandFromClient(socketChannel);
+            } catch (IOException e) {
+                log.error("Client disconnected.");
+                selectionKey.cancel();
+            }
         }
     }
 
@@ -98,6 +107,7 @@ public class Server {
             }
             Set<SelectionKey> keySet = selector.selectedKeys();
             Iterator<SelectionKey> itor = keySet.iterator();
+
             while (itor.hasNext() && serverOn) {
                 SelectionKey selectionKey = itor.next();
                 itor.remove();
@@ -106,7 +116,8 @@ public class Server {
                 checkServerCommand();
             }
         } catch (IOException ioException) {
-            log.error("Не удалось проверить клиентов");
+            log.error("Клиент отключился");
+            new SaveCommand().execute(serverReceiver);
         }
     }
 
@@ -156,8 +167,7 @@ public class Server {
                     }
                 }
             }
-        } catch (NoSuchElementException | IOException e) {
-
+        } catch (NoSuchElementException | IOException ignored) {
         }
     }
 
@@ -215,6 +225,7 @@ public class Server {
             System.out.println(e.getLocalizedMessage());
             return null;
         } catch(IOException e) {
+            System.out.println("IOEXCEPTION");
             return null;
         }
     }

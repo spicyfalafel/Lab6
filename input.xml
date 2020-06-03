@@ -6,7 +6,7 @@
       <x>-1</x>
       <y>-1</y>
     </coordinates>
-    <creationDate>Tue Jun 02 18:05:18 MSK 2020</creationDate>
+    <creationDate>Wed Jun 03 19:10:35 MSK 2020</creationDate>
     <age>1</age>
     <wingspan>1.0</wingspan>
     <character>EVIL</character>
@@ -28,13 +28,41 @@
       </location>
     </killer>
   </dragon>
+  <dragon id="2">
+    <name>dragon</name>
+    <coordinates>
+      <x>1</x>
+      <y>2</y>
+    </coordinates>
+    <creationDate>Wed Jun 03 19:10:50 MSK 2020</creationDate>
+    <age>3</age>
+    <wingspan>4.0</wingspan>
+    <character>GOOD</character>
+    <type>null</type>
+    <killer>
+      <name />
+      <birthday>
+        <year>2020</year>
+        <month>JUNE</month>
+        <day>3</day>
+      </birthday>
+      <hairColor>BROWN</hairColor>
+      <nationality>RUSSIA</nationality>
+      <location>
+        <x>0</x>
+        <y>0</y>
+        <z>0.0</z>
+        <name />
+      </location>
+    </killer>
+  </dragon>
   <dragon id="0">
     <name>Макеавелли</name>
     <coordinates>
       <x>100</x>
       <y>200</y>
     </coordinates>
-    <creationDate>Tue Jun 02 18:05:18 MSK 2020</creationDate>
+    <creationDate>Wed Jun 03 19:10:35 MSK 2020</creationDate>
     <age>10</age>
     <wingspan>100.0</wingspan>
     <character>GOOD</character>

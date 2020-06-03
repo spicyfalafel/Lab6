@@ -16,7 +16,7 @@ public class Dragon implements Comparable<Dragon>, Serializable {
     private float wingspan; //Значение поля должно быть больше 0
     private DragonType type; //Поле может быть null
     private DragonCharacter character; //Поле не может быть null
-    private Person killer; //Поле может брыть null
+    private Person killer; //Поле может быть null
 
     private static long idInc = 0;
 
@@ -231,7 +231,7 @@ public class Dragon implements Comparable<Dragon>, Serializable {
                 "wingspan: " + this.wingspan + "\n" +
                 "type: " + ((type == null) ? "null" : this.type.toString()) + "\n" +
                 "character: " + this.character.toString() + "\n" +
-                "killer: " + ((this.killer == null) ? "null" : this.killer.toString()) + "\n";
+                "killer: " + ((this.killer == null) ? "null" : this.killer.toString());
     }
 
     /**
