@@ -18,7 +18,6 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.*;
 
-import static com.itmo.server.ServerMain.PORT;
 
 public class Server {
     private final int DEFAULT_BUFFER_SIZE = 4096;
@@ -34,6 +33,7 @@ public class Server {
     private static Selector selector;
 
     public void run() {
+        log.info("Запуск сервера.");
         initializeCollection();
         setupNet();
         while (serverOn) {
@@ -188,7 +188,7 @@ public class Server {
         try {
             ssc = ServerSocketChannel.open();
             ssc.configureBlocking(false);
-            InetSocketAddress inetSocketAddress = new InetSocketAddress(PORT);
+            InetSocketAddress inetSocketAddress = new InetSocketAddress(port);
             ssc.socket().bind(inetSocketAddress);
             selector = Selector.open();
             ssc.register(selector, SelectionKey.OP_ACCEPT);

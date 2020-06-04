@@ -21,6 +21,7 @@ public class Client {
     private final int port;
     private boolean once = true;
     public void run() {
+
         registerCommands();
         connect();
         while (notExit) {
@@ -113,7 +114,10 @@ public class Client {
                 once=true;
                 return;
             } catch (UnknownHostException e) {
-                System.out.println("Неправильно указан хост");
+                if(once){
+                    once=false;
+                    System.out.println("Неправильно указан хост");
+                }
             } catch (IOException e) {
                 if(once){
                     once=false;
