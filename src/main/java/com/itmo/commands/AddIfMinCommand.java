@@ -23,8 +23,7 @@ public class AddIfMinCommand extends Command {
 
     @Override
     public void clientInsertion() {
-        Scanner sc = new Scanner(System.in);
-        FieldsScanner helper = new FieldsScanner(sc);
+        FieldsScanner helper = FieldsScanner.getInstance();
         dr = helper.scanDragon();
     }
 

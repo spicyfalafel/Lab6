@@ -95,6 +95,7 @@ public class Server {
             } catch (IOException e) {
                 log.error("Client disconnected.");
                 selectionKey.cancel();
+                new SaveCommand().execute(serverReceiver);
             }
         }
     }

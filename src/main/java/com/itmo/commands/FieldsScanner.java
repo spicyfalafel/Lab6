@@ -2,6 +2,8 @@ package com.itmo.commands;
 
 import com.itmo.collection.*;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -11,16 +13,28 @@ import java.util.Scanner;
  * класс для ввода полей элемента.
  */
 public class FieldsScanner {
-    private Scanner sc;
-
+    private static Scanner sc;
+    private static FieldsScanner fs;
     /**
      * Instantiates a new Input helper.
      *
-     * @param sc the sc
+     * @param scanner the scanner
      */
-    public FieldsScanner(Scanner sc){
-        this.sc = sc;
+    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    private FieldsScanner(Scanner scanner){
+        sc = scanner;
     }
+
+    public void configureScanner(Scanner scanner){
+        sc = scanner;
+    }
+    public static FieldsScanner getInstance(){
+        if(fs==null) {
+            fs = new FieldsScanner(new Scanner(System.in));
+        }
+        return fs;
+    }
+
 
     /**
      * @param cheVvodit че вводить?
@@ -30,6 +44,7 @@ public class FieldsScanner {
         System.out.println("введите " + cheVvodit);
         return sc.nextLine().trim();
     }
+
     private String scanLine(){
         return sc.nextLine().trim();
     }
@@ -108,7 +123,7 @@ public class FieldsScanner {
                 res = Integer.parseInt(input);
                 if(positiveOnly && (res<=0)){
                     System.out.println("необходимо ввести число большее нуля");
-                }else{
+                }else   {
                     return res;
                 }
             }catch (Exception e){

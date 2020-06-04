@@ -1,6 +1,9 @@
 package com.itmo.commands;
 
 import com.itmo.collection.Dragon;
+
+import java.io.BufferedReader;
+import java.io.Reader;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -20,7 +23,7 @@ public class AddElementCommand extends Command {
 
     @Override
     public void clientInsertion() {
-        FieldsScanner fieldsScanner = new FieldsScanner(new Scanner(System.in));
+        FieldsScanner fieldsScanner = FieldsScanner.getInstance();
         this.dr = fieldsScanner.scanDragon();
     }
 

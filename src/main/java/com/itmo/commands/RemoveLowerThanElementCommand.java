@@ -25,8 +25,7 @@ public class RemoveLowerThanElementCommand extends Command {
     private Dragon dr;
     @Override
     public void clientInsertion() {
-        Scanner sc = new Scanner(System.in);
-        FieldsScanner helper = new FieldsScanner(sc);
+        FieldsScanner helper = FieldsScanner.getInstance();
         dr = helper.scanDragon();
     }
 

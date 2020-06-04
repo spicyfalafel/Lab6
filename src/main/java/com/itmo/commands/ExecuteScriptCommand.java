@@ -4,8 +4,10 @@ import com.itmo.app.SerializationManager;
 import com.itmo.client.Client;
 import com.itmo.server.Response;
 import com.itmo.server.Server;
+import com.sun.xml.internal.ws.spi.db.FieldSetter;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.nio.ByteBuffer;
@@ -39,10 +41,13 @@ public class ExecuteScriptCommand extends Command {
             while ((line = reader.readLine()) != null) {
                 Command c = Client.getCommandFromString(line);
                 if (c != null) {
+                    FieldsScanner scanner = FieldsScanner.getInstance();
+                    scanner.configureScanner(new Scanner(reader));
                     c.clientInsertion();
+                    scanner.configureScanner(new Scanner(System.in));
                     byte[] serializedCommand = SerializationManager.writeObject(c);
                     Client.sendOneByte();
-                    Client.socket.getOutputStream().write(serializedCommand);
+                    Client.getSocket().getOutputStream().write(serializedCommand);
                     Client.getAnswer();
                 }
             }
@@ -58,13 +63,6 @@ public class ExecuteScriptCommand extends Command {
 
     }
 
-
-    /**
-     * скрипт выполняется путём вызова метода выполнения команды из com.itmo.Main.
-     * это немного нарушает концепцию шаблона Команда, но это крайне удобно
-     * @return
-
-     */
     @Override
     public String execute(CommandReceiver receiver) {
         return "script done";

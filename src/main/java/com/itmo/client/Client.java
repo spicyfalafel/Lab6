@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class Client {
     private static CommandsInvoker invoker;
-    public static Socket socket;
+    private static Socket socket;
     public static final int BUFFER_SIZE = 4096;
     private static boolean notExit = true;
     private static final BufferedReader systemIn
@@ -142,5 +142,9 @@ public class Client {
         invoker.register("print_descending", new PrintDescendingCommand(null));
         //invoker.register("save", new SaveCommand(mainReceiver, null));
         invoker.register("execute_script", new ExecuteScriptCommand(null));
+    }
+
+    public static Socket getSocket() {
+        return socket;
     }
 }

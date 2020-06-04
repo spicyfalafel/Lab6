@@ -24,8 +24,7 @@ public class UpdateIdCommand extends Command{
 
     @Override
     public void clientInsertion() {
-        Scanner sc = new Scanner(System.in);
-        FieldsScanner fieldsScanner = new FieldsScanner(sc);
+        FieldsScanner fieldsScanner = FieldsScanner.getInstance();
         dr = fieldsScanner.scanDragon();
     }
 
